@@ -6,8 +6,6 @@ import videoCategoryRouter from "./routes/videoCategory.route.js"
 import startServer from "./config/startServer.js"
 import logReqRes from "./middlewares/logReqRes.js"
 import logger from "./utils/logger.js"
-import videoRouter from "./routes/video.route.js"
-import searchRouter from "./routes/search.route.js"
 
 const app = express()
 
@@ -33,5 +31,3 @@ app.use((err, req, res, next) => {
 
 // Routers
 app.use("/videoCategory", videoCategoryRouter)
-app.use("/video", videoRouter)
-app.use("/search", searchRouter)
