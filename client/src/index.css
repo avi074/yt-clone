@@ -1,3 +1,55 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    @apply text-primary dark:text-primaryDark bg-white/90 h-screen;
+}
+
+.secondary-text {
+    @apply text-secondary dark:text-secondaryDark;
+}
+
+.icon-btn {
+    @apply size-9 p-1.5 cursor-pointer rounded-full hover:bg-primaryDark;
+}
+
+.categ-list {
+    @apply flex overflow-hidden space-x-4;
+}
+
+.categ-item {
+    @apply py-1 px-2 flex-shrink-0 cursor-pointer text-[0.8rem] font-semibold bg-primaryDark/80 hover:bg-primary/20 rounded-lg transition-all duration-300;
+}
+
+.categ-active {
+    @apply bg-primary hover:bg-primary/95 text-ytWhite;
+}
+
+.tab-div {
+    @apply flex border-2 border-blue-700 rounded-lg overflow-clip;
+}
+
+.tab-divider {
+    @apply h-12 w-0.5 border border-blue-800;
+}
+
+.tab-active {
+    @apply bg-blue-300 text-primary;
+}
+
+.tab-text {
+    @apply w-full text-center text-lg font-semibold border-collapse py-2 cursor-pointer;
+}
+
+.input-wrapper{
+    @apply flex flex-col gap-1 flex-wrap my-2;
+}
+
+.input-wrapper label{
+    @apply tracking-wide font-medium capitalize;
+}
+
+.input-wrapper input{
+    @apply outline-0 border-0 focus:ring-0 p-0.5 border-b-2;
+}
