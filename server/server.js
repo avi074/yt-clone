@@ -1,33 +1,37 @@
 import express from "express"
-import { config } from "dotenv"
-import mongoose from "mongoose"
-import logger from "./middlewares/logger.js"
 import cors from "cors"
+import connectDB from "./config/db.js"
+import env from "./config/env.js"
+import videoCategoryRouter from "./routes/videoCategory.route.js"
+import startServer from "./config/startServer.js"
+import logReqRes from "./middlewares/logReqRes.js"
+import logger from "./utils/logger.js"
+import videoRouter from "./routes/video.route.js"
+import searchRouter from "./routes/search.route.js"
 
-
-// environment variables config
-config()
-
-//=================== Server SetUp ========================
 const app = express()
-const PORT = process.env.PORT ?? 3000
 
-app.listen(PORT, () => {
-  console.log("Server is listening at", PORT, "port")
+// Starting the Server
+startServer(app, Number(env.SERVER_PORT))
+
+// MongoDB Connection
+connectDB()
+// Middlewares
+app.use(cors())
+app.use(express.json())
+app.use(logReqRes)
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  logger.error(err.stack)
+  const statusCode = err.statusCode || 500; // Default to 500 if not specified
+  const message = statusCode === 500 ? 'Internal Server Error' : err.message;
+
+  // Send response to client
+  res.status(statusCode).json({ success: false, message });
 })
 
-//============= MongoDB Connection SetUp ==================
-
-const MONGO_URI = process.env.MONGO_URI
-
-mongoose
-  .connect(MONGO_URI)
-  .then((_) => console.log("MongoDB is connected!"))
-  .catch((error) => console.error("Connection Error :", error))
-
-//==================== Middlewares ======================
-app.use(express.json())
-app.use(cors())
-app.use(logger)
-
-//==================== Routers ==========================
+// Routers
+app.use("/videoCategory", videoCategoryRouter)
+app.use("/video", videoRouter)
+app.use("/search", searchRouter)
