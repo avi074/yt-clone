@@ -14,7 +14,7 @@ const fetchSearchQ = callYouTubeAPI.bind(null, "search")
 
 const fetchVideoCategories = callYouTubeAPI.bind(null, "videoCategories")
 const fetchVideos = callYouTubeAPI.bind(null, "videos")
-const fetchChannel = callYouTubeAPI.bind(null, "channel")
-const fetchComments = callYouTubeAPI.bind(null, "comments")
+const fetchChannel = callYouTubeAPI.bind(null, "channels")
+const fetchComments = callYouTubeAPI.bind(null, "commentThreads")
 
-export { fetchSearchQ, fetchVideoCategories, fetchVideos, fetchComments }
+export { fetchSearchQ, fetchVideoCategories, fetchVideos, fetchChannel, fetchComments }

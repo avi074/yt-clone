@@ -21,6 +21,7 @@ const callYouTubeAPI = async (endpoint, userParams = {}) => {
         key: env.YOUTUBE_API_KEY,
       },
     }
+    // console.log(config)
     // Make the request
     const response = await axios.get(
       `https://www.googleapis.com/youtube/v3/${endpoint}`,
@@ -28,7 +29,7 @@ const callYouTubeAPI = async (endpoint, userParams = {}) => {
     )
     logger.success(`fetched ${endpoint}!`)
     // Return the data from the response
-    return response.data
+    return response.data.items
   } catch (error) {
     logger.error(`YouTube API: ${error.message}`)
     logger.error(`failed to fetch ${endpoint}!`)
