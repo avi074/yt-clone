@@ -1,22 +1,19 @@
-# [Client]()
+# FrontEnd (Client)
 
-
-## Prerequisites
-
-Before you start, ensure you have Node.js installed on your machine. If not, you can download and install it from [here](https://nodejs.org/).
+A frontend for ytClone app with the help of vite, react, redux, react-router & flowbite tailwind css.
 
 ## Installation
 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/avi074/ShoppyGlobe.git
+git clone https://github.com/avi074/yt-clone.git
 ```
 
 2. Navigate into the project directory:
 
 ```bash
-cd client
+cd yt-clone/client
 ```
 
 3. Install dependencies:
@@ -47,14 +44,8 @@ npm run build
 
   - `assets/` : Assets
   - `components/` : React Components
-  - `utils/` : Utilities & Redux Store
+  - `pages/` : React Pages
+  - `redux/` : contains redux-store for videos, user & other settings
+  - `utils/` : Contains utility functions
 
 - `index.html` : Index HTML file
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-## License
-
-[MIT](LICENSE)
