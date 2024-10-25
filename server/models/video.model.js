@@ -1,10 +1,9 @@
-import { model, Schema, Types } from "mongoose"
+import { model, Schema } from "mongoose"
 
 const commentSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     ref: "user",
-    required: true,
   },
   username: {
     type: String,
@@ -29,6 +28,11 @@ const commentSchema = new Schema({
 })
 
 const videoSchema = new Schema({
+  ytId: {
+    type: String,
+    unique: true,
+    sparse: true,
+  },
   categoryId: {
     type: Schema.Types.ObjectId,
     ref: "videoCategory",
@@ -40,7 +44,7 @@ const videoSchema = new Schema({
   },
   description: {
     type: String,
-    required: true,
+    default: "",
   },
   thumbnailUrl: {
     type: String,
@@ -48,18 +52,26 @@ const videoSchema = new Schema({
   videoUrl: {
     type: String,
   },
+  duration: {
+    type: String,
+    required: true,
+  },
+  channelYt: {
+    type: String,
+  },
   channelId: {
     type: Schema.Types.ObjectId,
     ref: "channel",
-    required: true,
+    unique: true,
+    sparse: true,
   },
-  channelName: {
+  channelTitle: {
     type: String,
     required: true,
   },
   channelAvatar: {
     type: String,
-    required: true,
+    // required: true,
   },
   statistics: {
     type: {
@@ -76,9 +88,15 @@ const videoSchema = new Schema({
         type: Number,
         default: 0,
       },
+      commentCount: {
+        type: Number,
+        default: 0,
+      },
     },
   },
-  comments: [commentSchema],
+  comments: {
+    type: [commentSchema],
+  },
   publishedAt: {
     type: Date,
     default: Date.now(),

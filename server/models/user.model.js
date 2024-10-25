@@ -17,8 +17,6 @@ const userSchema = new Schema(
     },
     avatar: String,
     channels: [{ type: Schema.Types.ObjectId, ref: "channel" }],
-    likedVideos: [{ type: Schema.Types.ObjectId, ref: "video" }],
-    dislikedVideos: [{ type: Schema.Types.ObjectId, ref: "video" }],
   },
   { timestamps: true },
 )

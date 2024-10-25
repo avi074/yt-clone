@@ -8,6 +8,7 @@ const channelSchema = new Schema(
     },
     description: {
       type: String,
+      default: "",
     },
     ytId: {
       type: String,
@@ -18,9 +19,6 @@ const channelSchema = new Schema(
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
-    },
-    bannerUrl: {
-      type: String,
     },
     subscribers: {
       type: Number,
