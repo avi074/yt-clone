@@ -1,5 +1,8 @@
-# [Client]()
+# [YT-CLONE](https://drive.google.com/file/d/178ypB7TA-7dcJ--eZb_Nk7JkpwAH5cN8/view?usp=sharing)
 
+A react-redux clone of youTube with custom database & limited functionality.
+
+[video explanation](https://drive.google.com/file/d/178ypB7TA-7dcJ--eZb_Nk7JkpwAH5cN8/view?usp=sharing)
 
 ## Prerequisites
 
@@ -10,13 +13,13 @@ Before you start, ensure you have Node.js installed on your machine. If not, you
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/avi074/ShoppyGlobe.git
+git clone https://github.com/avi074/yt-clone.git
 ```
 
 2. Navigate into the project directory:
 
 ```bash
-cd client
+cd yt-clone
 ```
 
 3. Install dependencies:
@@ -25,31 +28,56 @@ cd client
 npm install
 ```
 
+4. Client Install:
+
+```bash
+cd client && npm install
+```
+
+6. Back to Main:
+
+```bash
+cd ..
+```
+
+7. Server Install:
+
+```bash
+cd server && npm install
+```
+
+8. Back to Main:
+
+```bash
+cd ..
+```
+
 ## Usage
 
-To start the project, open the Folder in IDE & run
+To start both client & server, open the Folder in IDE & run
 
 ```bash
 npm run dev
+
 ```
 
-To build your project for production:
+To start both client, open the Folder in IDE & run
 
 ```bash
-npm run build
+npm run client
+```
+
+To start server, open the Folder in IDE & run
+
+```bash
+npm run server
 ```
 
 ## Folder Structure
 
-- `public/` : Contains your public files.
+- `client` - For frontend development
 
-- `src/` : Contains your JSX/Source files
-
-  - `assets/` : Assets
-  - `components/` : React Components
-  - `utils/` : Utilities & Redux Store
-
-- `index.html` : Index HTML file
+- `server` - For backend development
 
 ## Contributing
 

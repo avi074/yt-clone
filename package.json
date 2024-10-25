@@ -1,8 +1,7 @@
 {
-  "name": "web-template",
+  "name": "yt-clone",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "client": "npm run dev --prefix client",
     "server": "npm start --prefix server",
@@ -12,5 +11,8 @@
   "license": "MIT",
   "devDependencies": {
     "concurrently": "^9.0.1"
+  },
+  "dependencies": {
+    "react-lazy-load-image-component": "^1.6.2"
   }
 }
