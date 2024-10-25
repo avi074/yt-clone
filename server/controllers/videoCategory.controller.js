@@ -4,12 +4,12 @@ import handler from "../utils/handler.js"
 const { handlePromise } = handler("VideoCategory")
 
 /**
- *
+ * gets all the videoCategories
  * @param {import('express').Request} req Request
  * @param {import('express').Response} res Response
  *
  */
-async function getVideoCategories(req, res) {
+export async function getVideoCategories(req, res) {
   const result = await handlePromise(videoCategoryModel.find(), req.method)
 
   res.status(result.statusCode).json({
@@ -17,5 +17,3 @@ async function getVideoCategories(req, res) {
     items: result.data,
   })
 }
-
-export { getVideoCategories }
