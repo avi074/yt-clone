@@ -5,18 +5,16 @@ import logger from "../utils/logger.js"
 /**
  *
  * @param {string} endpoint
- * @param {function} fetchCallback
- * @param {function} updateCallback
+ * @param {function} callback
  */
-export default async function main(endpoint, fetchCallback, updateCallback) {
+export default async function main(endpoint, callback) {
   await connectDB() // Connect to the database
   try {
     logger.info(`updating ${endpoint} in db...`)
-    const items = await fetchCallback()
-    await updateCallback(items)
+    await callback()
     logger.success(`updated ${endpoint}!`)
   } catch (error) {
-    logger.error(`Failed to update categories: ${error}`)
+    logger.error(`Failed to update ${endpoint}: ${error.message}`)
   } finally {
     logger.log("Closing MongoDB Conneection!")
     mongoose.connection.close() // Close the database connection

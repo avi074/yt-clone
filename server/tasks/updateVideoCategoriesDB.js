@@ -23,4 +23,6 @@ const updateCategoriesInDB = async (categories) => {
   }
 }
 
-main("videoCategories", fetchVideoCategories, updateCategoriesInDB)
+main("videoCategories", async () => {
+  await updateCategoriesInDB(await fetchVideoCategories())
+})
