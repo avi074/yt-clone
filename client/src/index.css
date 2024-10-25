@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-    @apply text-primary dark:text-primaryDark bg-white/90 h-screen;
+    @apply text-primary dark:text-primaryDark bg-white/90 h-screen scrollbar-thin;
 }
 
 .secondary-text {
@@ -43,7 +43,7 @@ body {
 }
 
 .input-wrapper{
-    @apply flex flex-col gap-1 flex-wrap my-2;
+    @apply flex flex-col gap-1 flex-wrap my-2 relative;
 }
 
 .input-wrapper label{
@@ -52,4 +52,20 @@ body {
 
 .input-wrapper input{
     @apply outline-0 border-0 focus:ring-0 p-0.5 border-b-2;
+}
+
+.btn-primary{
+    @apply font-semibold bg-ytRed text-ytWhite rounded-lg text-center cursor-pointer capitalize hover:bg-ytBlack/80;
+}
+
+.channel-input-wrapper{
+    @apply flex flex-col gap-2 w-full relative;
+}
+
+.channel-input-wrapper label{
+    @apply min-w-fit p-2 font-medium tracking-wide;
+}
+
+.channel-input-wrapper input[type=text]{
+    @apply p-0.5 mx-2 border-0 focus:ring-0 border-b-2;
 }
