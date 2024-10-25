@@ -51,11 +51,11 @@ export default function handler(name = "Resource", infoMessages = null) {
 
         if (result || (Array.isArray(result) && result.length > 0)) {
           response.success = true
-          response.statusCode = method.includes("POST") ? 201 : 200
+          response.statusCode = method.startsWith("POST") ? 201 : 200
           response.data = result
         } else {
           // If result is null, undefined, or an empty array, return 404, 400
-          response.statusCode = method.includes("POST") ? 400 : 404
+          response.statusCode = method.startsWith("POST") ? 400 : 404
         }
       } catch (error) {
         // 422, 500 & any other error
@@ -64,10 +64,10 @@ export default function handler(name = "Resource", infoMessages = null) {
         response.data = error.message
       } finally {
         response.message =
-          resInfo[method][response.statusCode] ||
+          resInfo?.[method]?.[response.statusCode] ??
           resInfo.ERROR[response.statusCode]
-        return response
       }
+      return response
     },
 
     /**

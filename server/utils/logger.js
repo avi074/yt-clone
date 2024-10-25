@@ -2,12 +2,16 @@
 import colors from "colors"
 
 /**
+ * consoles the message with date
  * @param {string} msg
  */
 const showMessage = (msg) => {
   console.log(`${new Date().toLocaleTimeString().italic} ${msg}`.bold)
 }
 
+/**
+ * Centralised logger
+ */
 const logger = {
   /**
    * @param {string} message
