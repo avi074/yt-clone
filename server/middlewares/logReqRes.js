@@ -10,7 +10,6 @@ import logger from "../utils/logger.js"
  * @returns
  */
 export default function logReqRes(req, res, next) {
-  logger.log(`Request at ${new Date().toLocaleString()}`)
   logger.info(`[REQ] ${req.method} ${req.originalUrl}`)
   
   res.on("finish", () => {

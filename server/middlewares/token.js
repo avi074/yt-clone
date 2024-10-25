@@ -1,13 +1,13 @@
 import jwt from "jsonwebtoken"
-import { config } from "dotenv"
 import crypto from "node:crypto"
+import logger from "../utils/logger.js"
+import env from "../config/env.js"
 
 /**
  * returns the methods used for creating & verifying tokens
  */
-const tokenModule = (({
-  parsed: { ALGORITHM, SECRET_KEY, TOKEN_SECRET_KEY },
-}) => {
+const tokenModule = (() => {
+  const { ALGORITHM, SECRET_KEY, TOKEN_SECRET_KEY } = env
   const key = Buffer.from(SECRET_KEY, "hex")
   return {
     /**
@@ -18,14 +18,14 @@ const tokenModule = (({
     create: (payload) => {
       try {
         // creating a jwt token
-        const token = jwt.sign(payload, TOKEN_SECRET_KEY, { expiresIn: "1h" })
+        const token = jwt.sign(payload, TOKEN_SECRET_KEY, { expiresIn: "6h" })
 
         const cipher = crypto.createCipheriv(ALGORITHM, key, null)
         let encryptedToken = cipher.update(token, "utf-8", "hex")
         encryptedToken += cipher.final("hex")
         return encryptedToken
       } catch (error) {
-        console.error(error.message)
+        logger.error(error.message)
         throw error
       }
     },
@@ -44,12 +44,12 @@ const tokenModule = (({
         const data = jwt.verify(token, TOKEN_SECRET_KEY)
         return data
       } catch (error) {
-        console.error(error.message)
+        logger.error(error.message)
         throw error
       }
     },
   }
-})(config())
+})()
 
 export default tokenModule
 
@@ -58,7 +58,7 @@ export default tokenModule
  * @param {Function} callback -> verification function from payloads
  * @returns
  */
-export function checkAutorizationAndRole(callback) {
+export function checkAutorization(callback) {
   /**
    * Handles the authentication of the user via jwt_token
    * @param {import("express").Request} req
@@ -71,24 +71,25 @@ export function checkAutorizationAndRole(callback) {
       // fetches the token from headers
       const token = req.headers?.authorization?.split(" ")
 
-      if (!(token && token.length == 2 && token[0] == "shoppyglobe_jwt")) {
-        return res
+      if (!(token && token.length == 2 && token[0] == "ytClone")) {
+        res
           .status(401)
           .json({ message: "Access Denied. No / Invalid token provided !" })
-      }
+      } else {
+        const decode = tokenModule.verify(token[1])
 
-      const decode = tokenModule.verify(token[1])
-
-      // checks for access control or something else
-      if (!callback(decode)) {
-        return res
-          .status(403)
-          .json({ message: "Access Denied. invalid token data!" })
+        // checks for access control or something else
+        if (!callback(decode)) {
+          res
+            .status(403)
+            .json({ message: "Access Denied. invalid token data!" })
+        } else {
+          req.tokenPayload = decode
+          next()
+        }
       }
-      req.tokenPayload = decode
-      next()
     } catch (error) {
-      return res.status(400).json({ message: "invalid / expired token !" })
+      res.status(400).json({ message: "invalid / expired token !" })
     }
   }
 }
