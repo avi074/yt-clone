@@ -1,21 +1,28 @@
-import axios from "axios"
 import { useEffect, useRef, useState } from "react"
+import useFetch from "../utils/useFetch"
+import { useDispatch } from "react-redux"
+import { searchVideosQ } from "../redux/videosSlice"
 
-const VideoCategories = ({className}) => {
+const VideoCategories = ({ className }) => {
   const categoryListRef = useRef(null)
+  const { data, loading, error } = useFetch("/api/videoCategory/")
   const [categories, setCategories] = useState([])
   const [activeCategory, setActiveCategory] = useState("0")
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    axios
-      .get("/api/videoCategory")
-      .then((res) => setCategories(res.data.items))
-      .catch((err) => console.error(err))
-  }, [])
+    if (data) {
+      setCategories(data)
+    }
+  }, [data])
 
+  const handleClick = (id) => {
+    setActiveCategory(id)
+  }
+  
   useEffect(() => {
-    console.log('Active Categ Changed')
-  }, [activeCategory])
+    dispatch(searchVideosQ({categoryId: activeCategory}))
+  }, [activeCategory, dispatch])
 
   /**
    * handles mouse wheel event for horizontol scroll
@@ -56,8 +63,22 @@ const VideoCategories = ({className}) => {
     }
   }
 
+  if (loading) {
+    return <div>Loading...</div>
+  }
+  if (error) {
+    return <div>Error : {error.message}</div>
+  }
+
   return (
-    <div className={`w-full py-2 mx-auto ${className}`}>
+    <div
+      className={`w-full py-2 mx-auto ${className}`}
+      onMouseEnter={() => {
+        document.body.style.overflow = "hidden"
+      }}
+      onMouseLeave={() => {
+        document.body.style.overflow = ""
+      }}>
       <div
         ref={categoryListRef}
         onWheel={handleWheel}
@@ -69,7 +90,7 @@ const VideoCategories = ({className}) => {
           className={`categ-item ${
             activeCategory == "0" ? "categ-active" : ""
           }`}
-          onClick={() => setActiveCategory("0")}>
+          onClick={() => handleClick("0")}>
           All
         </span>
         {categories.map((category) => (
@@ -79,7 +100,7 @@ const VideoCategories = ({className}) => {
             className={`categ-item ${
               activeCategory == category._id ? "categ-active" : ""
             }`}
-            onClick={() => setActiveCategory(category._id)}>
+            onClick={() => handleClick(category._id)}>
             {category.title}
           </span>
         ))}

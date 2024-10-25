@@ -5,30 +5,62 @@ import {
   Modal,
   ModalBody,
   ModalHeader,
-  TabItem,
-  Tabs,
 } from "flowbite-react"
-import { useEffect, useRef, useState } from "react"
-import { BsGoogle } from "react-icons/bs"
+import { useState } from "react"
+import { BsEyeFill } from "react-icons/bs"
+import { useDispatch } from "react-redux"
+import { fetchData } from "../redux/userSlice"
 
 function SignModal({ show, closeModal }) {
   const [isLogIn, setIsLogIn] = useState(true)
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  })
+  const [showPassword, setShowPassword] = useState(false)
+  const dispatch = useDispatch()
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }))
+  const handleClose = () => {
+    closeModal()
+    setShowPassword(false)
+    setIsLogIn(true)
   }
 
+  /**
+   *
+   * @param {React.FormEvent<HTMLFormElement>} e
+   */
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault()
+      const formData = new FormData(e.currentTarget)
+
+      const res = await axios.post(
+        isLogIn ? "/api/user/login" : "/api/user/signup",
+        formData,
+      )
+
+      if (res.status < 299) {
+        alert(`User ${isLogIn ? "logged in" : "registered"} successfully!`)
+        if (isLogIn) {
+          handleClose()
+          localStorage.setItem("accessToken", res.data.accessToken)
+          dispatch(fetchData(res.data.accessToken))
+        } else {
+          setIsLogIn(!isLogIn)
+        }
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        // Handle server-side validation errors
+        alert(`Error: ${error.response.data.message}`)
+      } else {
+        // Handle other errors
+        alert("An unexpected error occurred. Please try again.")
+      }
+    }
+  }
+
+  const togglePasswordVisibility = () => setShowPassword(!showPassword)
+
   return (
-    <Modal show={show} onClose={closeModal} size='md' position='top-center'>
+    <Modal show={show} onClose={handleClose} size='md' position='top-center'>
       <ModalHeader
         theme={{
           base: "mt-3 p-2 flex items-center",
@@ -55,7 +87,8 @@ function SignModal({ show, closeModal }) {
         <form
           id='signForm'
           className='flex flex-col gap-3 mb-2'
-          onReset={(e) => {}}>
+          onReset={handleClose}
+          onSubmit={handleSubmit}>
           {!isLogIn && (
             <div className='input-wrapper'>
               <label htmlFor='user-name'>Username : </label>
@@ -64,8 +97,15 @@ function SignModal({ show, closeModal }) {
                 id='user-name'
                 name='username'
                 placeholder='Enter the username'
-                onChange={handleChange}
                 required
+                onPaste={(e) => {
+                  e.preventDefault()
+                }}
+                onKeyDown={(e) => {
+                  if (e.key == " ") {
+                    e.preventDefault()
+                  }
+                }}
               />
             </div>
           )}
@@ -77,7 +117,6 @@ function SignModal({ show, closeModal }) {
               id='user-email'
               name='email'
               placeholder='Enter the email'
-              onChange={handleChange}
               required
             />
           </div>
@@ -85,20 +124,32 @@ function SignModal({ show, closeModal }) {
           <div className='input-wrapper'>
             <label htmlFor='user-password'>Password : </label>
             <input
-              type='password'
+              type={showPassword ? "text" : "password"}
               id='user-password'
               name='password'
               placeholder='Enter the password'
-              onChange={handleChange}
+              minLength='8'
               required
+              className='!pr-8'
+            />
+            <BsEyeFill
+              title='show password'
+              onClick={togglePasswordVisibility}
+              className='icon-btn !size-8 absolute right-0 bottom-0'
             />
           </div>
 
           <ButtonGroup position='end' className='flex justify-end px-2'>
-            <Button type='submit' gradientMonochrome='success' className="font-semibold tracking-wide">
+            <Button
+              type='submit'
+              gradientMonochrome='success'
+              className='font-semibold tracking-wide'>
               Submit
             </Button>
-            <Button type='reset' gradientMonochrome='failure' className="font-semibold tracking-wide">
+            <Button
+              type='reset'
+              gradientMonochrome='failure'
+              className='font-semibold tracking-wide'>
               Cancel
             </Button>
           </ButtonGroup>

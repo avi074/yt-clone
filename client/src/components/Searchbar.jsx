@@ -9,10 +9,9 @@ function Searchbar() {
   const navigate = useNavigate()
   return (
     <>
-      <IoSearch className='icon-btn md:hidden' onClick={() => {}} />
       <form
         id='searchForm'
-        className='hidden md:flex items-center justify-center w-2/5'
+        className='flex items-center justify-center w-full'
         onSubmit={(event) => {
           event.preventDefault()
           navigate(`/search/${searchQ}`)

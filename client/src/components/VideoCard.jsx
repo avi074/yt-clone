@@ -1,83 +1,96 @@
-import { Avatar, Card } from "flowbite-react"
-import moment from "moment"
+import { Card } from "flowbite-react"
+import {
+  LazyLoadComponent,
+  LazyLoadImage,
+} from "react-lazy-load-image-component"
 import { BiDotsVerticalRounded } from "react-icons/bi"
 import { BsDot } from "react-icons/bs"
-import { Link } from "react-router-dom"
+import {convertToAbbreviation, timeSinceUpload} from "../utils/coventions.js"
+import { useNavigate } from "react-router"
 
-const VideoCard = ({ video, horizontal = false }) => {
-  const { medium, standard, high, maxres } = video.snippet.thumbnails
+const VideoCard = ({ video, horizontal = false, short = false }) => {
+  const navigate = useNavigate()
 
-  const convertToAbbreviation = (number) => {
-    // Create a new Intl.NumberFormat object with options
-    const formatter = new Intl.NumberFormat("en", {
-      notation: "compact",
-      compactDisplay: "short",
-      maximumSignificantDigits: 3,
-    })
+  let maxRetry = 3
+  const handleClick = (videoId) => navigate(`/watch/${videoId}`)
 
-    // Format the number and return the result
-    return formatter.format(number)
-  }
-
-  function timeSinceUpload(uploadDate) {
-    return moment(uploadDate).fromNow()
+  const handleError = (e) => {
+    if (maxRetry) {
+      e.currentTarget.src = `https://api.dicebear.com/9.x/initials/svg?seed=${video.channelTitle}&radius=50`
+      maxRetry--
+    } else {
+      e.currentTarget.src = ""
+    }
   }
 
   return (
-    <Link to={`/watch/${video.id}`}>
+    <LazyLoadComponent>
       <Card
         theme={{
           root: {
-            base: "flex",
+            base: "flex cursor-pointer",
             children: "h-full p-2",
+            horizontal: {
+              on: "rounded-lg shadow-lg p-2 border",
+            },
           },
           img: {
             base: "w-full h-full object-cover aspect-video",
+            horizontal: {
+              on: "!w-1/2 rounded-lg",
+            },
           },
         }}
         horizontal={horizontal}
         renderImage={({ img }, horizontal) => (
-          <img
+          <LazyLoadImage
             className={`${img.base} ${
               horizontal ? img.horizontal.on : img.horizontal.off
             }`}
-            src={video.snippet.thumbnails.default.url}
-            srcSet={`
-              ${maxres ? maxres.url + " 1280w," : ""} 
-              ${high ? high.url + " 640w," : ""} 
-              ${standard ? standard.url + " 480w," : ""} 
-              ${medium ? medium.url + " 320w" : ""}
-            `}
-            sizes='(max-width: 640px) 320px, 
-           (max-width: 1024px) 480px, 
-           (max-width: 1440px) 640px, 
-           1280px'
+            alt={video.title}
+            loading='lazy'
+            src={video.thumbnailUrl}
+            onClick={() => handleClick(video._id)}
           />
         )}>
-        {/* Video Information */}
+        {
+          /* Video Information */
+          //
+        }
         <div className='flex gap-2 items-start'>
-          <Avatar img={`https://api.dicebear.com/9.x/initials/svg?seed=${video.snippet.channelTitle}&radius=50`} className="size-8"/>
-          <div className='flex flex-col w-4/5 overflow-clip'>
+          <LazyLoadImage
+            src={video.channelAvatar}
+            alt=''
+            loading='lazy'
+            onError={handleError}
+            className={`object-contain size-10 rounded-full ${
+              short ? "hidden" : "inline"
+            }`}
+          />
+
+          <div
+            className='flex flex-col w-4/5 overflow-clip'
+            onClick={() => handleClick(video._id)}>
             <p className='font-semibold line-clamp-2 break-words text-sm'>
-              {video.snippet.title}
+              {video.title}
             </p>
             <div className='secondary-text text-sm font-medium'>
-              <p className='line-clamp-1'>{video.snippet.channelTitle}</p>
-              <p className='flex items-center scale-y-90 justify-start'>
+              <p className='line-clamp-1'>{video.channelTitle}</p>
+              <p className='flex items-center flex-wrap scale-y-90 justify-start'>
                 <span>
-                  {convertToAbbreviation(video.statistics.viewCount)} views
+                  {convertToAbbreviation(video.statistics.views)} views
                 </span>
                 <BsDot />
-                <span> {timeSinceUpload(video.snippet.publishedAt)}</span>
+                <span> {timeSinceUpload(video.publishedAt)}</span>
               </p>
             </div>
           </div>
-          <span>
+          <span className={`${short ? "hidden" : "block"}`}>
             <BiDotsVerticalRounded className='icon-btn !size-6 !p-0.5' />
           </span>
         </div>
       </Card>
-    </Link>
+    </LazyLoadComponent>
   )
 }
 export default VideoCard

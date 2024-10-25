@@ -33,9 +33,9 @@ import {
   SiYoutubekids,
 } from "react-icons/si"
 import { TfiCup } from "react-icons/tfi"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
-function AppDrawer({ collapse, className='' }) {
+function AppDrawer({ collapse, className = "" }) {
   const items = {
     topIcons: [
       {
@@ -174,9 +174,11 @@ function AppDrawer({ collapse, className='' }) {
   }
 
   const [activeItem, setActiveItem] = useState("Home")
+  const navigate = useNavigate()
 
   return (
-    <div className={`bg-white self-start transition-[width] ease-linear duration-500 ${className}`}>
+    <div
+      className={`bg-white self-start transition-[width] ease-linear duration-500 ${className}`}>
       {collapse ? (
         <div className='hidden md:flex flex-col gap-4 min-w-full'>
           {[...items.topIcons, items.yourSection[0]].map((ele) => (
@@ -184,7 +186,9 @@ function AppDrawer({ collapse, className='' }) {
               to={ele.link}
               key={`collapsed-${ele.name}`}
               title={ele.name}
-              className={`flex flex-col gap-1 py-2 px-1 scale-90 rounded-lg items-center justify-center hover:bg-primaryDark ${activeItem == ele.name && 'bg-primaryDark'}`}
+              className={`flex flex-col gap-1 py-2 px-1 scale-90 rounded-lg items-center justify-center hover:bg-primaryDark ${
+                activeItem == ele.name && "bg-primaryDark"
+              }`}
               onClick={() => setActiveItem(ele.name)}>
               <ele.icon size={20} />
               <span className='text-xs font-semibold'>{ele.name}</span>
@@ -194,26 +198,29 @@ function AppDrawer({ collapse, className='' }) {
       ) : (
         <Sidebar
           aria-label='Sidebar'
-          className="max-w-52"
+          className='max-w-52'
           theme={{
             root: {
               inner:
                 "h-full overflow-hidden hover:overflow-y-auto scrollbar-thin rounded px-1 dark:bg-gray-800",
             },
-            item:{
-              base:"flex p-2 rounded-lg",
-              active:'bg-primaryDark'
-            }
+            item: {
+              base: "flex p-2 rounded-lg",
+              active: "bg-primaryDark",
+            },
           }}>
           <SidebarItems>
             {Object.keys(items).map((key, idx) => (
-              <SidebarItemGroup key={`${key}-${idx}`}>
+              <SidebarItemGroup key={`${key}-${idx}`} className="cursor-pointer">
                 {items[key].map((ele, idx) => (
                   <SidebarItem
                     key={`${ele.name}-${idx}`}
                     icon={() => <ele.icon size={24} color={ele.color} />}
                     active={activeItem === ele.name}
-                    onClick={() => setActiveItem(ele.name)}>
+                    onClick={() => {
+                      setActiveItem(ele.name)
+                      navigate(ele.link)
+                    }}>
                     <span className='text-sm font-semibold'>{ele.name}</span>
                   </SidebarItem>
                 ))}
