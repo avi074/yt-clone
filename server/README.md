@@ -1,6 +1,6 @@
 # Server
 
-A backend server created for Frontend with the help of node, express, mongoose & rest apis.
+A backend server created for ytClone app with the help of node, express, mongoose & rest apis.
 
 ## Prerequisites
 
@@ -17,7 +17,7 @@ git clone https://github.com/avi074/ShoppyGlobe-Server.git
 2. Navigate into the project directory:
 
 ```bash
-cd Web-Template/server
+cd yt-clone/server
 ```
 
 3. Install dependencies:
@@ -36,17 +36,25 @@ npm start
 
 ## Folder Structure
 
+- `config` : Contains configuration files
+
 - `middlewares/` : Contains middleware functions for api handling.
 
-- `models/` : Contains mongodb models for cart, product & user
+- `models/` : Contains mongodb models
 
 - `controllers/` : Contains controller functions for models
 
 - `routers/` : Contains multiple routers based on models
 
-- `screenshots/` : Contains sample screenshots of api calls
+- `services/` : Contains youTube api service functions
 
-- `server.js` : server config js file
+- `tasks/` : Contains tasks regarding local-db updates from services
+
+- `utils/` : Contains utility function for logging & handling
+
+- `uploads/` : Conatins static files for users, channels & videos
+
+- `server.js` : server js file
 
 ## Contributing
 
